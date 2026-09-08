@@ -40,13 +40,13 @@ def style_base_layout():
             
             /* Hide Top Bar of streamlit */
 
-            # #MainMenu, footer, header{
-            #     visibility: hidden;
-            # }
+            MainMenu, footer, header{
+                visibility: hidden;
+            }
 
-            # .black-container{
-            #     padding-top: 1.5rem !important;
-            # }
+            .black-container{
+                padding-top: 1.5rem !important;
+            }
 
             h1{
                 font-family: 'Climate Crisis', sans-serif !important;
