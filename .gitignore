@@ -1,0 +1,8 @@
+.DS_Store
+.venv/
+.streamlit/
+dist/
+.vscode/
+.idea/
+.env
+*.pyc
