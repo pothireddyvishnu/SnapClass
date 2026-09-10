@@ -5,11 +5,17 @@ import io
 @st.dialog("Share Class Link")
 def share_subject_dialog(subject_name, subject_code):
     headers = st.context.headers
-    protocol = headers.get("X-Forwarded-Proto", "https")
     host = headers.get("X-Forwarded-Host") or headers.get("Host")
+    is_local = host and (
+        host.startswith("localhost")
+        or host.startswith("127.0.0.1")
+    )
+    protocol = headers.get(
+        "X-Forwarded-Proto",
+        "http" if is_local else "https"
+    )
     app_domain = f"{protocol}://{host}"
-
-    join_url = f'{app_domain}/join?code={subject_code}'
+    join_url = f"{app_domain}/?join_code={subject_code}"
     st.header('Scan QR to Join')
     qr = segno.make(join_url)
     out = io.BytesIO()
