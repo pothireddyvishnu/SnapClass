@@ -12,7 +12,7 @@ from src.components.dialog_add_photo import add_photos_dialog
 from src.components.dialog_attendance_results import attendance_results_dialog
 from src.components.dialog_voice_attendance import voice_attendance_dialog
 from src.components.subject_card import subject_card
-from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects
+from src.database.db import check_teacher_exists, create_teacher, get_attendance_for_teacher, teacher_login, get_teacher_subjects
 from src.pipelines.face_pipeline import predict_attendance
 
 from src.database.config import supabase
@@ -211,6 +211,44 @@ def teacher_tab_manage_subjects():
 def teacher_tab_attendance_reports():
     st.header('Attendance Reports')
 
+    teacher_id = st.session_state.teacher_data['teacher_id']
+    records = get_attendance_for_teacher(teacher_id)
+
+    if not records:
+        return
+
+    data = []
+
+    for record in records:
+        ts = record.get('timestamp')
+
+        data.append({
+            'ts_group': ts.split('.')[0] if ts else None,
+            'Time': datetime.fromisoformat(ts).strftime('%Y-%m-%d %H:%M:%S') if ts else None,
+            'Subject': record['subjects']['name'],
+            'Subject Code': record['subjects']['subject_code'],
+            'is_present': record.get('is_present', False)
+        })
+
+    df = pd.DataFrame(data)
+
+    summary = (
+        df.groupby(['ts_group', 'Time', 'Subject', 'Subject Code'])
+        .agg(
+            Present_Count = ('is_present', 'sum'),
+            Total_Count = ('is_present', 'count')
+        ).reset_index()
+    )
+
+    summary['Attendance Stats'] = (
+        '✅' + summary['Present_Count'].astype(str) + ' /' + summary['Total_Count'].astype(str) + ' Students'
+    )
+
+    display_df = (summary.sort_values(by='ts_group', ascending=False)
+                    [['Time', 'Subject', 'Subject Code', 'Attendance Stats']]
+                )
+
+    st.dataframe(display_df, width='stretch', hide_index=True)
 
 def login_teacher(username, password):
     if not username or not password:
