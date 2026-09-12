@@ -22,7 +22,7 @@ def student_dashboard():
         header_dashboard()
     with c2:
         st.subheader(f"Welcome, {student_data['name']}")
-        if st.button("Logout", type='secondary', key='student_logout_btn'):
+        if st.button("Logout", type='secondary', key='student_logout_btn', shortcut='Ctrl+O'):
             st.session_state.is_logged_in = False
             del st.session_state.student_data
             st.rerun()
@@ -63,10 +63,16 @@ def student_dashboard():
 
         stats = stats_map.get(sid, {'total_attendance': 0, 'total_classes': 0})
 
-        def uneroll_btn():
-            if st.button('Unenroll from this subject', type='tertiary', width='stretch', icon=':material/delete_forever:'):
-                unenroll_student_to_subject(student_id, sid)
-                st.toast(f'Unenrolled from {sub["name"]} successfully!')
+        def unenroll_btn(subject_id=sid, subject_name=sub['name']):
+            if st.button(
+                'Unenroll from this subject',
+                key=f'unenroll_subject_{subject_id}',
+                type='tertiary',
+                width='stretch',
+                icon=':material/delete_forever:',
+            ):
+                unenroll_student_to_subject(student_id, subject_id)
+                st.toast(f'Unenrolled from {subject_name} successfully!')
                 st.rerun()
 
 
@@ -79,7 +85,7 @@ def student_dashboard():
                     (':material/event:', 'Total', stats['total_classes']),
                     (':material/check_circle:', 'Present', stats['total_attendance'])
                 ],
-                footer_callback=uneroll_btn
+                footer_callback=unenroll_btn
             )
 
     footer_dashboard()
@@ -96,7 +102,7 @@ def student_screen():
     with c1:
         header_dashboard()
     with c2:
-        if st.button('Go back to Home', type='secondary', key='teacher_login_back_btn', width='stretch'):
+        if st.button('Go back to Home', type='secondary', key='teacher_login_back_btn', width='stretch', shortcut='Ctrl+B'):
             st.session_state['login_type'] = None
             st.rerun()
     

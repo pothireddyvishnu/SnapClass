@@ -15,7 +15,7 @@ def auto_enroll_dialog(subject_code):
         st.error('Subject Code not found!')
         if st.button('Close'):
             st.query_params.clear()
-            st.rerun
+            st.rerun()
         return
     subject = res.data[0]
 
@@ -24,7 +24,7 @@ def auto_enroll_dialog(subject_code):
         st.info('You are already enrolled in this subject.')
         if st.button('Close'):
             st.query_params.clear()
-            st.rerun
+            st.rerun()
         return
     st.markdown(f'Would you like to enroll in **{subject["name"]}** (_{subject["subject_code"]}_ )?')
 

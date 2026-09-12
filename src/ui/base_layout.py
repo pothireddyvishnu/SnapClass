@@ -12,6 +12,20 @@ def style_background_home():
                     padding: 2.5rem !important;
                     border-radius: 5rem !important;
                 }
+
+                /* The home cards are light, so their Streamlit headings must
+                   not inherit the white foreground from dark mode. */
+                .stApp div[data-testid="stColumn"] [data-testid="stHeading"],
+                .stApp div[data-testid="stColumn"] [data-testid="stHeading"] *,
+                .stApp div[data-testid="stColumn"] [data-testid="stHeadingWithActionElements"],
+                .stApp div[data-testid="stColumn"] [data-testid="stHeadingWithActionElements"] * {
+                    color: #1e293b !important;
+                }
+
+                .stApp div[data-testid="stColumn"] button,
+                .stApp div[data-testid="stColumn"] button * {
+                    color: white !important;
+                }
         </style>
     """, unsafe_allow_html=True)
 
@@ -22,9 +36,31 @@ def style_background_home():
 def style_background_dashboard():
     st.markdown("""
         <style>
-                    .stApp{
-                    background: #E0E3FF !important;
-                    }
+            .stApp {
+                background: #E0E3FF !important;
+            }
+
+            .stApp [data-testid="stHeading"],
+            .stApp [data-testid="stHeading"] *,
+            .stApp [data-testid="stHeadingWithActionElements"],
+            .stApp [data-testid="stHeadingWithActionElements"] *,
+            .stApp [data-testid="stSelectbox"] label,
+            .stApp [data-testid="stCameraInput"] label,
+            .stApp [data-testid="stTextInput"] label,
+            .stApp [data-testid="stAudioInput"] label,
+            .stApp [data-testid="stMetricLabel"],
+            .stApp [data-testid="stMetricValue"] {
+                color: #1e293b !important;
+            }
+
+            .stApp [data-baseweb="select"] * {
+                color: #1e293b !important;
+            }
+
+            .stApp button,
+            .stApp button * {
+                color: white !important;
+            }
         </style>
     """, unsafe_allow_html=True)
 
@@ -40,13 +76,13 @@ def style_base_layout():
             
             /* Hide Top Bar of streamlit */
 
-            # MainMenu, footer, header{
-            #     visibility: hidden;
-            # }
+            MainMenu, footer, header{
+                visibility: hidden;
+            }
 
-            # .black-container{
-            #     padding-top: 1.5rem !important;
-            # }
+            .black-container{
+                padding-top: 1.5rem !important;
+            }
 
             h1{
                 font-family: 'Climate Crisis', sans-serif !important;
